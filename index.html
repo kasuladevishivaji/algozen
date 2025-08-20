@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlgoZen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif;
+            background-color: #e5e7eb;
+        }
+        .main-container {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 95vh;
+            width: 90vw;
+            max-width: 1000px;
+        }
+        #chat-window::-webkit-scrollbar { width: 8px; }
+        #chat-window::-webkit-scrollbar-track { background: transparent; }
+        #chat-window::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+        #chat-window::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message {
+            animation: fade-in-up 0.4s ease-out forwards;
+        }
+
+        .prose pre {
+            background-color: #1f2937;
+            color: #d1d5db;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            border: 1px solid #374151;
+        }
+        .prose code:not(pre code) {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            padding: 0.2em 0.4em;
+            border-radius: 0.25rem;
+            font-size: 0.9em;
+        }
+        
+        .btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+        .btn:active {
+            transform: translateY(0);
+            filter: brightness(0.95);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center h-screen">
+
+    <div class="main-container">
+        <header class="bg-slate-900 text-white p-4 flex items-center shrink-0 border-b border-slate-700">
+            <div class="flex items-center gap-3">
+                <div class="bg-cyan-500 p-2 rounded-lg">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path></svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold">AlgoZen</h1>
+                    <p class="text-xs text-slate-400">Your Expert Algorithm Analyst</p>
+                </div>
+            </div>
+        </header>
+
+        <main id="chat-window" class="flex-1 p-6 overflow-y-auto bg-slate-50">
+        </main>
+
+        <footer class="p-4 border-t border-slate-200 bg-white shrink-0">
+            <div class="relative mb-3">
+                 <input 
+                    type="text" 
+                    id="user-description" 
+                    placeholder="Ask a DSA question or provide context..." 
+                    class="w-full p-3 pl-4 pr-12 border border-slate-300 rounded-full focus:ring-2 focus:ring-cyan-500 focus:outline-none transition"
+                    autocomplete="off">
+            </div>
+
+            <div id="action-buttons" class="flex items-center justify-between gap-3">
+                <span class="text-xs text-slate-400">Made by Shivaji © 2025</span>
+                <div class="flex items-center gap-3">
+                    <button id="analyze-file-btn" class="btn flex items-center gap-2 bg-slate-600 text-white px-4 py-2 rounded-full font-semibold text-sm shadow-sm hover:bg-slate-700">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <span>Analyze File</span>
+                    </button>
+                    <button id="analyze-screen-btn" class="btn flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-full font-semibold text-sm shadow-md hover:shadow-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <span>Analyze Screen</span>
+                    </button>
+                </div>
+            </div>
+             <div id="loading-state" class="hidden text-center py-3">
+                <svg class="animate-spin h-6 w-6 text-cyan-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <p class="mt-2 text-slate-600 font-semibold text-sm">AlgoZen is thinking...</p>
+            </div>
+        </footer>
+    </div>
+    
+    <div id="sources-modal" class="fixed inset-0 z-50 items-center justify-center flex hidden bg-black bg-opacity-75">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-4xl">
+            <h2 class="text-xl font-bold mb-4 text-slate-800">Select a Window or Screen to Analyze</h2>
+            <div id="sources-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[60vh] overflow-y-auto p-1"></div>
+            <button id="close-modal-btn" class="mt-6 bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition">Cancel</button>
+        </div>
+    </div>
+    
+    <script src="./renderer.js"></script>
+</body>
+</html>

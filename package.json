@@ -1,0 +1,41 @@
+{
+	"name": "algozen",
+	"displayName": "AlgoZen",
+	"version": "1.0.0",
+	"description": "An expert AI assistant for DSA, built with Electron.",
+	"author": "Shivaji",
+	"main": "main.js",
+	"scripts": {
+		"start": "electron .",
+		"build": "electron-builder"
+	},
+	"keywords": [],
+	"license": "ISC",
+	"devDependencies": {
+		"electron": "^28.0.0",
+		"electron-builder": "^24.6.4"
+	},
+	"build": {
+		"appId": "com.shivaji.algozen",
+		"productName": "AlgoZen",
+		"files": [
+			"main.js",
+			"preload.js",
+			"index.html",
+			"renderer.js",
+			"package.json"
+		],
+		"directories": {
+			"output": "dist"
+		},
+		"win": {
+			"icon": "build/icon.ico"
+		},
+		"mac": {
+			"icon": "build/icon.icns"
+		},
+		"linux": {
+			"icon": "build/icon.png"
+		}
+	}
+}
