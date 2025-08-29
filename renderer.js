@@ -171,3 +171,4 @@ function handleError(error, customMessage) {
 window.onload = () => {
     displayBotMessage("Hello! I'm **AlgoZen**. How can I help you with Data Structures or Algorithms today?");
 };
+// shivaji is working
